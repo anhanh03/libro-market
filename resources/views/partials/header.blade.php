@@ -20,6 +20,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">Đăng nhập</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">Đăng ký</a>
+                        </li>
                     @else
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -28,6 +31,13 @@
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{{ route('user.profile') }}">Hồ sơ</a></li>
                                 <li><hr class="dropdown-divider"></li>
+                                @if(Auth::user()->isSeller())
+                                    <li><a class="dropdown-item" href="{{ route('seller.dashboard') }}">Người bán</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('seller.register') }}">Đăng ký người bán</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                @endif
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

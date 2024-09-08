@@ -88,8 +88,8 @@
                         @foreach($topSellingProducts as $product)
                         <tr>
                             <td>{{ $product->name }}</td>
-                            <td>{{ $product->total_sold }}</td>
-                            <td>{{ number_format($product->total_revenue) }} đ</td>
+                            <td>{{ $product->orders_sum_quantity }}</td>
+                            <td>{{ number_format($product->orders_sum_quantity * $product->price) }} đ</td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -33,7 +33,7 @@
     </div>
     <div class="mb-3">
         <label for="image" class="form-label">Hình ảnh sản phẩm</label>
-        <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+        <input type="file" class="form-control" id="image" name="image" required>
     </div>
     <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
 </form>

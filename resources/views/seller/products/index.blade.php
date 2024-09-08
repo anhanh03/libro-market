@@ -27,7 +27,7 @@
                     <td>{{ $product->name }}</td>
                     <td>{{ number_format($product->price) }} đ</td>
                     <td>{{ $product->stock }}</td>
-                    <td>{{ $product->category->name }}</td>
+                    <td>{{ $product->category_id }}</td>
                     <td>
                         <a href="{{ route('seller.products.edit', $product) }}" class="btn btn-sm btn-primary">Sửa</a>
                         <form action="{{ route('seller.products.destroy', $product) }}" method="POST" class="d-inline">

@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
+use App\Http\Middleware\SellerMiddleware; // Import middleware
 
 // Trang chủ và các trang tĩnh
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -42,7 +43,7 @@ Route::delete('/coupon/remove', [CouponController::class, 'remove'])->name('coup
 Route::post('/orders/{order}/pay', [PaymentController::class, 'process'])->name('payment.process');
 
 // Vận chuyển (chỉ cho người bán)
-Route::middleware(['auth', 'seller'])->group(function () {
+Route::middleware(['auth', SellerMiddleware::class])->group(function () {
     Route::put('/orders/{order}/shipping', [ShippingController::class, 'update'])->name('shipping.update');
 });
 
@@ -67,7 +68,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/search', [SearchController::class, 'index'])->name('search.index');
 
 // Người bán
-Route::middleware(['auth', 'seller'])->group(function () {
+Route::middleware(['auth', SellerMiddleware::class])->group(function () {
     Route::get('/seller/dashboard', [SellerController::class, 'dashboard'])->name('seller.dashboard');
     Route::get('/seller/products', [ProductController::class, 'sellerIndex'])->name('seller.products');
     Route::get('/seller/products/create', [ProductController::class, 'create'])->name('seller.products.create');
@@ -99,3 +100,6 @@ Route::post('email/resend', [VerificationController::class, 'resend'])->name('ve
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/seller/register', [SellerController::class, 'showRegisterForm'])->name('seller.register');
+Route::post('/seller/register', [SellerController::class, 'register'])->name('seller.register.post');

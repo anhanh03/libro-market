@@ -3,19 +3,20 @@
 @section('title', 'Đăng nhập')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Đăng nhập</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="mb-3 row">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">Email</label>
-                            <div class="col-md-6">
+<div class="form-bg">
+    <div class="container mx-auto">
+        <div class="row">
+            <div class="mt-5">
+                <div class="form-container">
+                    <div class="left-content bg-white">
+                        <img class="img-fit" src="img/libro.png" alt="pageLetf" srcset="">
+                    </div>
+                    <div class="right-content">
+                        <h3 class="form-title">Đăng nhập</h3>
+                        <form class="form-horizontal" method="POST" action="{{ route('login') }}">
+                            @csrf
+                            <div class="form-group">
+                                <label>Username / Email</label>
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
@@ -23,11 +24,8 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="mb-3 row">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">Mật khẩu</label>
-                            <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Password</label>
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
@@ -35,33 +33,22 @@
                                     </span>
                                 @enderror
                             </div>
-                        </div>
-
-                        <div class="mb-3 row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="remember">
-                                        Ghi nhớ đăng nhập
-                                    </label>
-                                </div>
+                            <button class="btn signin " type="submit">Đăng nhập</button>
+                            <div class="remember-me">
+                                <input type="checkbox" class="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                <span class="check-label">Ghi nhớ đăng nhập</span>
                             </div>
-                        </div>
-
-                        <div class="mb-0 row">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Đăng nhập
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        Quên mật khẩu?
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="forgot">Quên mật khẩu?</a>
+                            @endif
+                        </form>
+                        <span class="separator">HOẶC</span>
+                        <ul class="social-links">
+                            <li><a href="#"><i class="fab fa-google"></i> Đăng nhập với Google</a></li>
+                            <li><a href="#"><i class="fab fa-facebook-f"></i> Đăng nhập với Facebook</a></li>
+                        </ul>
+                        <span class="signup-link">Chưa có tài khoản? Đăng ký <a href="{{ route('register') }}">tại đây</a></span>
+                    </div>
                 </div>
             </div>
         </div>

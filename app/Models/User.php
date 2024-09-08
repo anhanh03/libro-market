@@ -22,6 +22,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'address',
+        'role',
     ];
 
     /**
@@ -52,11 +53,6 @@ class User extends Authenticatable
         return $this->hasMany(Order::class);
     }
 
-    public function seller()
-    {
-        return $this->hasOne(Seller::class);
-    }
-
     public function cart()
     {
         return $this->hasMany(Cart::class);
@@ -65,5 +61,20 @@ class User extends Authenticatable
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function seller()
+    {
+        return $this->hasOne(Seller::class);
+    }
+
+    public function isSeller()
+    {
+        return $this->role === '1'; // Giả sử bạn có một cột 'role' trong bảng users để xác định vai trò
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'seller_id');
     }
 }

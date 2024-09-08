@@ -10,12 +10,8 @@ class Seller extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'shop_name',
-        'description',
-        'logo',
-        'address',
-        'phone',
+        'user_id', 'shop_name', 'business_name', 'business_address', 
+        'description', 'logo', 'address', 'phone', 'total_amount', 'total_orders'
     ];
 
     public function user()
@@ -32,4 +28,5 @@ class Seller extends Model
     {
         return $this->hasMany(Order::class);
     }
+    
 }

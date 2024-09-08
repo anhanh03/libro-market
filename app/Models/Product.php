@@ -14,13 +14,20 @@ class Product extends Model
         'description',
         'price',
         'image',
-        'category_id',
-        'featured',
+        'stock',
+        'seller_id'
     ];
 
     public function seller()
     {
-        return $this->belongsTo(Seller::class);
+        return $this->belongsTo(User::class, 'seller_id');
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_product')
+                    ->withPivot('quantity')
+                    ->withTimestamps();
     }
 
     public function reviews()

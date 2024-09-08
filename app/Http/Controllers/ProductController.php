@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -37,7 +38,22 @@ class ProductController extends Controller
 
     public function sellerIndex()
     {
-        $products = Auth::user()->products()->paginate(10);
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Bạn cần đăng nhập để xem sản phẩm.');
+        }
+
+        // Lấy người dùng hiện tại
+        $user = Auth::user();
+        $seller = Seller::where('user_id', $user->id)->first();
+        // Lấy sản phẩm của người dùng bằng Eloquent Query Builder
+        $products = Product::where('seller_id', $seller->id)->paginate(10);
+
+        // Kiểm tra xem có sản phẩm nào không
+        if ($products->isEmpty()) {
+            return view('seller.products.index', ['products' => $products])->with('error', 'Không có sản phẩm nào.');
+        }
+
         return view('seller.products.index', compact('products'));
     }
 
@@ -53,21 +69,37 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $imagePath = $request->file('image')->store('products', 'public');
+        $seller = Auth::user()->seller;
 
-        $product = Auth::user()
-            ->products()
-            ->create([
-                'name' => $validatedData['name'],
-                'description' => $validatedData['description'],
-                'price' => $validatedData['price'],
-                'category_id' => $validatedData['category_id'],
-                'image_url' => $imagePath,
-            ]);
+        if (!$seller) {
+            return redirect()->route('seller.products.create')->with('error', 'Người bán không tồn tại.');
+        }
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('products', 'public');
+            
+        } else {
+            
+            $imagePath = '/';
+           
+        }
+
+        
+        $product = $seller->products()->create([
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'image' => $imagePath,
+            'stock' => $validatedData['stock'],
+            'category_id' => $validatedData['category_id'],
+            'seller_id' => $seller->id,
+        ]);
+        
 
         return redirect()->route('seller.products')->with('success', 'Sản phẩm đã được tạo thành công.');
     }
@@ -87,6 +119,7 @@ class ProductController extends Controller
             'name' => 'required|max:255',
             'description' => 'required',
             'price' => 'required|numeric|min:0',
+            'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -100,6 +133,7 @@ class ProductController extends Controller
             'name' => $validatedData['name'],
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
+            'stock' => $validatedData['stock'],
             'category_id' => $validatedData['category_id'],
         ]);
 
