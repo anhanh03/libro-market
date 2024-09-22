@@ -5,6 +5,12 @@
 @section('content')
 <h1 class="mb-4">Giỏ hàng của bạn</h1>
 
+@php
+    $cartTotal = $cartItems->sum(function($item) {
+        return $item->product->price * $item->quantity;
+    });
+@endphp
+
 @if($cartItems->count() > 0)
 <div class="row">
     <div class="col-md-8">
@@ -13,7 +19,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <img src="{{ $item->product->image_url }}" class="img-fluid" alt="{{ $item->product->name }}">
+                        <img src="{{ asset('storage/' . $item->product->image)}}" class="img-fluid" alt="{{ $item->product->name }}">
                     </div>
                     <div class="col-md-9">
                         <h5 class="card-title">{{ $item->product->name }}</h5>
@@ -22,6 +28,7 @@
                             @csrf
                             @method('PUT')
                             <div class="input-group mb-3" style="width: 150px;">
+                                <input type="hidden" name="id" value="{{ $item->id }}">
                                 <input type="number" class="form-control" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->stock }}">
                                 <button class="btn btn-outline-secondary" type="submit">Cập nhật</button>
                             </div>
@@ -29,6 +36,7 @@
                         <form action="{{ route('cart.remove', $item) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
+                            <input type="hidden" name="id" value="{{ $item->id }}">
                             <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
                         </form>
                     </div>

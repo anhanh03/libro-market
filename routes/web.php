@@ -18,6 +18,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Middleware\SellerMiddleware; // Import middleware
+use App\Http\Controllers\CheckoutController;
 
 // Trang chủ và các trang tĩnh
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -40,7 +41,10 @@ Route::post('/coupon/apply', [CouponController::class, 'apply'])->name('coupon.a
 Route::delete('/coupon/remove', [CouponController::class, 'remove'])->name('coupon.remove');
 
 // Thanh toán
-Route::post('/orders/{order}/pay', [PaymentController::class, 'process'])->name('payment.process');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout'); // Thêm route checkout
+    Route::post('/orders/{order}/pay', [PaymentController::class, 'process'])->name('payment.process');
+});
 
 // Vận chuyển (chỉ cho người bán)
 Route::middleware(['auth', SellerMiddleware::class])->group(function () {

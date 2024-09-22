@@ -24,4 +24,9 @@ class Cart extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public static function destroy($id) {
+        // Xóa tất cả các sản phẩm trong giỏ hàng của người dùng hiện tại
+        $userId = auth()->id();
+        self::where('user_id', $userId)->delete();
+    }
 }

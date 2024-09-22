@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
-
+use App\Models\Cart;
+use App\Models\Payment;
 class OrderController extends Controller
 {
     public function index()
@@ -13,30 +15,66 @@ class OrderController extends Controller
         return view('orders.index', compact('orders'));
     }
 
-    public function show(Order $order)
+    public function show($id)
     {
+        // Lấy đơn hàng cùng với các sản phẩm liên quan
+        $order = Order::with('orderItems.product')->findOrFail($id);
+
         return view('orders.show', compact('order'));
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+        // Xác thực dữ liệu đầu vào
         $request->validate([
-            'shipping_address' => 'required',
-            'payment_method' => 'required'
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'payment_method' => 'required|string',
+            'total_amount' => 'required|numeric', // Thêm xác thực cho tổng số tiền
+            'products' => 'required|array', // Xác thực rằng có sản phẩm
         ]);
 
-        $order = Order::create([
-            'user_id' => auth()->id(),
-            'total_amount' => $this->calculateTotalAmount(),
-            'status' => 'pending',
-            'shipping_address' => $request->shipping_address,
-            'payment_method' => $request->payment_method
-        ]);
+        // Tạo đơn hàng mới
+        $order = new Order();
+        $order->user_id = auth()->id();
+        $order->seller_id = "3";
+        // $order->seller_id = $request->seller_id; // Thêm seller_id nếu cần
+        $order->coupon_id = $request->coupon_id; // Thêm coupon_id nếu cần
+        $order->total_amount = $request->total_amount; // Lưu tổng số tiền
+        $order->status = 'pending'; // Trạng thái mặc định
+        $order->shipping_name = $request->name;
+        $order->shipping_address = $request->address;
+        $order->shipping_phone = $request->phone;
+        $order->save();
 
-        // Chuyển sản phẩm từ giỏ hàng sang đơn hàng
-        $this->moveCartItemsToOrder($order);
+        // Lưu thông tin thanh toán vào bảng payments
+        $payment = new Payment();
+        $payment->order_id = $order->id;
+        $payment->payment_method = $request->payment_method;
+        $payment->amount = $request->total_amount;
+        $payment->status = 'pending';
+        $payment->save();
 
-        return redirect()->route('orders.show', $order)->with('success', 'Đơn hàng đã được tạo thành công');
+        // Lưu thông tin vào bảng order_item
+        foreach ($request->products as $productData) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $order->id;
+            $orderItem->product_id = $productData['product_id']; // Lấy product_id từ mảng sản phẩm
+            $orderItem->quantity = $productData['quantity']; // Lấy quantity từ mảng sản phẩm
+            $orderItem->price = $productData['price']; // Lấy price từ mảng sản phẩm
+            $orderItem->save();
+        }
+
+
+        // Xử lý các sản phẩm trong giỏ hàng
+        
+
+        // Xóa giỏ hàng sau khi đặt hàng
+        Cart::destroy($order->user_id);
+        if($request->payment_method == 'bank_transfer') {
+            return redirect()->route('bank_transfer');
+        }
+        return redirect()->route('orders.index')->with('success', 'Đặt hàng thành công!');
     }
 
     private function calculateTotalAmount()
@@ -44,8 +82,5 @@ class OrderController extends Controller
         // Logic tính tổng giá trị đơn hàng
     }
 
-    private function moveCartItemsToOrder($order)
-    {
-        // Logic chuyển sản phẩm từ giỏ hàng sang đơn hàng
-    }
+    
 }

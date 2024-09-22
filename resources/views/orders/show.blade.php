@@ -32,7 +32,7 @@
                             <span class="badge bg-secondary">Không xác định</span>
                     @endswitch
                 </p>
-                <p><strong>Phương thức thanh toán:</strong> {{ $order->payment_method }}</p>
+                <p><strong>Phương thức thanh toán:</strong> {{ $order->payment->payment_method }}</p>
             </div>
         </div>
         <div class="card mb-4">
@@ -48,14 +48,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($order->orderItems as $item)
-                        <tr>
-                            <td>{{ $item->product->name }}</td>
-                            <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format($item->price) }} đ</td>
-                            <td>{{ number_format($item->price * $item->quantity) }} đ</td>
-                        </tr>
-                        @endforeach
+                        @if($order->orderItems->isNotEmpty())
+                            @foreach($order->orderItems as $item)
+                            <tr>
+                                <td>{{ $item->product->name }}</td>
+                                <td>{{ $item->quantity }}</td>
+                                <td>{{ number_format($item->price) }} đ</td>
+                                <td>{{ number_format($item->price * $item->quantity) }} đ</td>
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="4" class="text-center">Không có sản phẩm nào.</td>
+                            </tr>
+                        @endif
                     </tbody>
                     <tfoot>
                         <tr>

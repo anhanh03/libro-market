@@ -1,31 +1,26 @@
-<form action="{{ route('cart.add') }}" method="POST">
-    @csrf
-    <input type="hidden" name="product_id" value="{{ $product->id }}">
-    <div class="mb-3">
-        <label for="quantity" class="form-label">Số lượng</label>
-        <input type="number" class="form-control" id="quantity" name="quantity" value="1" min="1">
-    </div>
-    <button type="submit" class="btn btn-primary btn-lg">Thêm vào giỏ hàng</button>
-</form>
+@extends('layouts.app')
 
 @section('title', 'Chi tiết sản phẩm')
 
 @section('content')
 <div class="row">
     <div class="col-md-6">
-        <img src="https://via.placeholder.com/600x400" class="img-fluid" alt="Sản phẩm">
+        <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" alt="Sản phẩm">
     </div>
     <div class="col-md-6">
-        <h1>Tên sản phẩm</h1>
-        <p class="lead">Giá: 500.000 đ</p>
-        <p>Mô tả chi tiết về sản phẩm...</p>
-        <form>
+        <h1>{{ $product->name }}</h1>
+        <p class="lead">{{ $product->price }} đ</p>
+        <p>{{ $product->description }}</p>
+        <form action="{{ route('cart.add') }}" method="POST">
+            @csrf
             <div class="mb-3">
+                <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <label for="quantity" class="form-label">Số lượng</label>
-                <input type="number" class="form-control" id="quantity" value="1" min="1">
+                <input type="number" class="form-control" name="quantity" id="quantity" value="1" min="1">
             </div>
             <button type="submit" class="btn btn-primary btn-lg">Thêm vào giỏ hàng</button>
         </form>
+        
     </div>
 </div>
 

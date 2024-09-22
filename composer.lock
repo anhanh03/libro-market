@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37e7f6d63a0771265bd3354f0c24cfc9",
+    "content-hash": "693504ef0a6fda4745b2611cf3a1470a",
     "packages": [
         {
             "name": "brick/math",
@@ -5682,6 +5682,51 @@
                 }
             ],
             "time": "2022-03-08T17:03:00+00:00"
+        },
+        {
+            "name": "vrpay/vrpay",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vr-pay/vr-pay-secure.git",
+                "reference": "20d7ccb7382abd7eb80c40517ba42a81762a779f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vr-pay/vr-pay-secure/zipball/20d7ccb7382abd7eb80c40517ba42a81762a779f",
+                "reference": "20d7ccb7382abd7eb80c40517ba42a81762a779f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "VRpay": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CardProcess GmbH",
+                    "homepage": "https://www.vr-pay-secure.de"
+                }
+            ],
+            "description": "VRpay PHPLib",
+            "homepage": "https://www.vr-pay-secure.de",
+            "keywords": [
+                "gateway",
+                "payment"
+            ],
+            "support": {
+                "issues": "https://github.com/vr-pay/vr-pay-secure/issues",
+                "source": "https://github.com/vr-pay/vr-pay-secure/tree/v1.0.0"
+            },
+            "time": "2018-02-09T15:38:02+00:00"
         },
         {
             "name": "webmozart/assert",
