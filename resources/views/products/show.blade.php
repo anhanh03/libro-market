@@ -5,7 +5,7 @@
 @section('content')
 <div class="row">
     <div class="col-md-6">
-        <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid" alt="Sản phẩm">
+        <img src="{{ asset('storage/' . $product->image) }}" class="img-fluid img-fit" alt="Sản phẩm">
     </div>
     <div class="col-md-6">
         <h1>{{ $product->name }}</h1>

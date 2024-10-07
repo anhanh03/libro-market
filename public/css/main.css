@@ -188,8 +188,52 @@
 }
 
 .img-fit {
-    width: 100%;
-    height: auto;
+    width: 160px;
+    height: 220px;
     display: block;
     margin: 0 auto;
+}
+
+.text-font-sz{
+    font-size: 20px !important;
+
+}
+
+
+.pagination {
+    display: flex; /* Sử dụng flexbox để căn giữa */
+    justify-content: center; /* Căn giữa các trang */
+    margin-top: 20px; /* Khoảng cách phía trên */
+}
+
+.pagination .page-item {
+    margin: 0 5px; /* Khoảng cách giữa các trang */
+}
+
+.pagination .page-link {
+    color: #007bff; /* Màu chữ */
+    background-color: #fff; /* Màu nền */
+    border: 1px solid #007bff; /* Đường viền */
+    padding: 8px 12px; /* Khoảng cách bên trong */
+    border-radius: 5px; /* Bo góc */
+    text-decoration: none; /* Bỏ gạch chân */
+    transition: background-color 0.3s, color 0.3s; /* Hiệu ứng chuyển đổi */
+}
+
+.pagination .page-link:hover {
+    background-color: #007bff; /* Màu nền khi hover */
+    color: white; /* Màu chữ khi hover */
+}
+
+.pagination .active .page-link {
+    background-color: #007bff; /* Màu nền cho trang hiện tại */
+    color: white; /* Màu chữ cho trang hiện tại */
+    pointer-events: none; /* Không cho phép click vào trang hiện tại */
+}
+
+.pagination .disabled .page-link {
+    color: #ccc; /* Màu chữ cho trang không khả dụng */
+    background-color: #f9f9f9; /* Màu nền cho trang không khả dụng */
+    border: 1px solid #ddd; /* Đường viền cho trang không khả dụng */
+    pointer-events: none; /* Không cho phép click vào trang không khả dụng */
 }

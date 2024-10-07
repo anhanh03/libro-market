@@ -82,6 +82,7 @@ Route::middleware(['auth', SellerMiddleware::class])->group(function () {
     Route::delete('/seller/products/{product}', [ProductController::class, 'destroy'])->name('seller.products.destroy');
     Route::get('/seller/orders', [OrderController::class, 'sellerIndex'])->name('seller.orders');
     Route::get('/seller/orders/{order}', [OrderController::class, 'sellerShow'])->name('seller.orders.show');
+    Route::get('seller/orders', [OrderController::class, 'sellerIndex'])->name('seller.orders.index');
 });
 
 // Xác thực

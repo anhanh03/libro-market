@@ -37,9 +37,9 @@ class SellerController extends Controller
         // Tính toán các sản phẩm bán chạy nhất
         $topSellingProducts = $seller->products()
             ->select('products.id', 'products.name', 'products.price', 'products.description', 'products.seller_id')
-            ->selectRaw('SUM(order_product.quantity) as total_sold')
-            ->join('order_product', 'products.id', '=', 'order_product.product_id')
-            ->join('orders', 'orders.id', '=', 'order_product.order_id')
+            ->selectRaw('SUM(order_items.quantity) as total_sold')
+            ->join('order_items', 'products.id', '=', 'order_items.product_id')
+            ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('products.seller_id', $seller->id)
             ->groupBy('products.id', 'products.name', 'products.price', 'products.description', 'products.seller_id')
             ->orderBy('total_sold', 'desc')

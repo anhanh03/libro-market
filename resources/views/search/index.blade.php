@@ -45,7 +45,7 @@
             @for ($i = 1; $i <= 6; $i++)
             <div class="col-md-4 mb-4">
                 <div class="card">
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top" alt="Sản phẩm {{ $i }}">
+                    <img src="https://via.placeholder.com/300x200" class="card-img-top img-fit" alt="Sản phẩm {{ $i }}">
                     <div class="card-body">
                         <h5 class="card-title">Sản phẩm {{ $i }}</h5>
                         <p class="card-text">Giá: {{ number_format(rand(100000, 1000000)) }} đ</p>

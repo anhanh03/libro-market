@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Seller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Payment;
@@ -13,6 +14,46 @@ class OrderController extends Controller
     {
         $orders = auth()->user()->orders()->latest()->paginate(10);
         return view('orders.index', compact('orders'));
+    }
+    public function sellerIndex(Request $request)
+    {
+        // Lấy seller_id của người dùng hiện tại
+        $seller = Seller::where('user_id', auth()->user()->id)->first();
+
+        // Kiểm tra xem seller có tồn tại không
+        if (!$seller) {
+            return redirect()->back()->with('error', 'Người bán không tồn tại.');
+        }
+
+        // Khởi tạo truy vấn
+        $query = Order::where('seller_id', $seller->id);
+
+        // Tìm kiếm theo khách hàng
+        if ($request->filled('search')) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        // Lọc theo ngày
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        // Sắp xếp
+        if ($request->filled('sort')) {
+            if ($request->sort === 'user') {
+                $query->join('users', 'orders.user_id', '=', 'users.id')
+                      ->orderBy('users.name', 'asc');
+            } else {
+                $query->orderBy($request->sort);
+            }
+        }
+
+        // Lấy tất cả các đơn hàng của người bán với phân trang
+        $orders = $query->latest()->paginate(10);
+
+        return view('seller.orders.index', compact('orders'));
     }
 
     public function show($id)
@@ -82,5 +123,12 @@ class OrderController extends Controller
         // Logic tính tổng giá trị đơn hàng
     }
 
-    
+    public function sellerShow($id)
+    {
+        // Tìm đơn hàng theo ID và load quan hệ với bảng 'user' và 'orderItems'
+        $order = Order::with(['user', 'orderItems.product'])->findOrFail($id);
+
+        // Trả về view chi tiết đơn hàng, kèm dữ liệu đơn hàng
+        return view('seller.orders.show', compact('order'));
+    }
 }

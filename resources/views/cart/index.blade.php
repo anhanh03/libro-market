@@ -19,7 +19,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <img src="{{ asset('storage/' . $item->product->image)}}" class="img-fluid" alt="{{ $item->product->name }}">
+                        <img src="{{ asset('storage/' . $item->product->image)}}" class="img-fluid img-fit" alt="{{ $item->product->name }}">
                     </div>
                     <div class="col-md-9">
                         <h5 class="card-title">{{ $item->product->name }}</h5>

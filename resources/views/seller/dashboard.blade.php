@@ -10,7 +10,7 @@
         <div class="card bg-primary text-white">
             <div class="card-body">
                 <h5 class="card-title">Tổng số sản phẩm</h5>
-                <p class="card-text display-4">{{ $totalProducts }}</p>
+                <p class="card-text display-4 text-font-sz">{{ $totalProducts }}</p>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
         <div class="card bg-success text-white">
             <div class="card-body">
                 <h5 class="card-title">Tổng số đơn hàng</h5>
-                <p class="card-text display-4">{{ $totalOrders }}</p>
+                <p class="card-text display-4 text-font-sz">{{ $totalOrders }}</p>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
         <div class="card bg-info text-white">
             <div class="card-body">
                 <h5 class="card-title">Doanh thu tháng này</h5>
-                <p class="card-text display-4">{{ number_format($monthlyRevenue) }} đ</p>
+                <p class="card-text display-4 text-font-sz">{{ number_format($monthlyRevenue) }} đ</p>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
         <div class="card bg-warning text-white">
             <div class="card-body">
                 <h5 class="card-title">Đơn hàng chờ xử lý</h5>
-                <p class="card-text display-4">{{ $pendingOrders }}</p>
+                <p class="card-text display-4 text-font-sz">{{ $pendingOrders }}</p>
             </div>
         </div>
     </div>
@@ -88,8 +88,8 @@
                         @foreach($topSellingProducts as $product)
                         <tr>
                             <td>{{ $product->name }}</td>
-                            <td>{{ $product->orders_sum_quantity }}</td>
-                            <td>{{ number_format($product->orders_sum_quantity * $product->price) }} đ</td>
+                            <td>{{ $product->total_sold }}</td>
+                            <td>{{ number_format($product->total_sold* $product->price) }} đ</td>
                         </tr>
                         @endforeach
                     </tbody>
